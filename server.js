@@ -55,6 +55,7 @@ Email: ${lead.email}
 })
 .then(() => console.log("✅ Email sent"))
 .catch(err => console.error("❌ Email error:", err));
+  }
 });
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
