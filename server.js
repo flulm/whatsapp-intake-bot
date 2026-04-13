@@ -1,16 +1,11 @@
 require('dotenv').config();
 
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-  user: process.env.EMAIL_USER,
-  pass: process.env.EMAIL_PASS
-  }
-});
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -46,10 +41,9 @@ app.post('/webhook', async (req, res) => {
 
     res.send(`<Response><Message>Thanks! We'll reply by email within a few hours 😊</Message></Response>`);
 
-// send email AFTER responding (non-blocking)
-transporter.sendMail({
-  from: 'acvbrasilform@gmail.com',
-  to: 'acvbrasilform@gmail.com',
+sgMail.send({
+  to: 'felipe@acvbrasil.com.br',
+  from: 'felipe@acvbrasil.com.br', // must be verified in SendGrid
   subject: 'New WhatsApp Lead',
   text: `
 New lead received:
@@ -59,9 +53,8 @@ Need: ${lead.need}
 Email: ${lead.email}
 `
 })
-.then(info => console.log("✅ Email sent:", info.response))
-.catch(err => console.error("❌ Email error:", err));    
-  }
+.then(() => console.log("✅ Email sent"))
+.catch(err => console.error("❌ Email error:", err));
 });
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
