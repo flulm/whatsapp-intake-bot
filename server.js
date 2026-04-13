@@ -40,28 +40,27 @@ app.post('/webhook', async (req, res) => {
     need: state[from].need,
     email
   };
-try {
-  await transporter.sendMail({
-    from: 'acvbrasilform@gmail.com',
-    to: 'acvbrasilform@gmail.com',
-    subject: 'New WhatsApp Lead',
-    text: `
+
+
+    delete state[from];
+
+    res.send(`<Response><Message>Thanks! We'll reply by email within a few hours 😊</Message></Response>`);
+
+// send email AFTER responding (non-blocking)
+transporter.sendMail({
+  from: 'acvbrasilform@gmail.com',
+  to: 'acvbrasilform@gmail.com',
+  subject: 'New WhatsApp Lead',
+  text: `
 New lead received:
 
 Phone: ${lead.phone}
 Need: ${lead.need}
 Email: ${lead.email}
 `
-  });
-
-  console.log("✅ Email sent!");
-} catch (err) {
-  console.error("❌ Email error:", err);
-}
-
-    delete state[from];
-
-    return res.send(`<Response><Message>Thanks! We'll reply by email within a few hours 😊</Message></Response>`);
+})
+.then(info => console.log("✅ Email sent:", info.response))
+.catch(err => console.error("❌ Email error:", err));    
   }
 });
 const PORT = process.env.PORT || 8080;
