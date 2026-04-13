@@ -64,7 +64,7 @@ Email: ${lead.email}
     return res.send(`<Response><Message>Thanks! We'll reply by email within a few hours 😊</Message></Response>`);
   }
 });
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log('Server running on port', PORT);
 });
