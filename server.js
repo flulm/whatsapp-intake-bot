@@ -16,7 +16,7 @@ app.post('/webhook', async (req, res) => {
 
   if (!state[from]) {
     state[from] = { step: 1 };
-    return res.send(`<Response><Message>Olá! 👋<br>Para te ajudar melhor, vou fazer 2 perguntas rápidas e te respondemos por e-mail com mais detalhes (normalmente em até 1 dia útil).<br>O que você precisa?</Message></Response>`);
+    return res.send(`<Response><Message>Olá! 👋\n\nPara te ajudar melhor, vou fazer 2 perguntas rápidas e te respondemos por e-mail com mais detalhes (normalmente em até 1 dia útil).\n\nO que você precisa?</Message></Response>`);
   }
 
   if (state[from].step === 1) {
@@ -37,13 +37,13 @@ app.post('/webhook', async (req, res) => {
 
     delete state[from];
 
-    res.send(`<Response><Message>Obrigado! ✅<br>Recebemos sua solicitação e vamos te responder por e-mail em breve.</Message></Response>`);
+    res.send(`<Response><Message>Obrigado! ✅\n\nRecebemos sua solicitação e vamos te responder por e-mail em breve.</Message></Response>`);
 
 await axios.post(process.env.TEAMS_WEBHOOK_URL, {
-  text: `📩 New WhatsApp Lead
+  text: `📩 Novo contato via WhatsApp
 
-Número: ${lead.phone}
-Demanda: ${lead.need}
+Telefone: ${lead.phone}\n\n
+Demanda: ${lead.need}\n\n
 Email: ${lead.email}`
 });
   }
