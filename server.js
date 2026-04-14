@@ -16,7 +16,7 @@ app.post('/webhook', async (req, res) => {
 
   if (!state[from]) {
     state[from] = { step: 1 };
-    return res.send(`<Response><Message>Olá! 👋\n\nPara te ajudar melhor, vou fazer 2 perguntas rápidas e te respondemos por e-mail com mais detalhes (normalmente em até 1 dia útil).\n\nO que você precisa?</Message></Response>`);
+    return res.send(`<Response><Message>Olá! 👋\n\nObrigado pelo contato! Somos da ACV Brasil. \n\nPara te ajudar melhor, vou fazer 2 perguntas rápidas e te respondemos por e-mail com mais detalhes (normalmente em até 1 dia útil).\n\nO que você precisa?</Message></Response>`);
   }
 
   if (state[from].step === 1) {
