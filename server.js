@@ -1,11 +1,9 @@
 require('dotenv').config();
 
-const sgMail = require('@sendgrid/mail');
+const axios = require('axios');
 
 const express = require('express');
 const bodyParser = require('body-parser');
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -41,20 +39,13 @@ app.post('/webhook', async (req, res) => {
 
     res.send(`<Response><Message>Thanks! We'll reply by email within a few hours 😊</Message></Response>`);
 
-sgMail.send({
-  to: 'felipe@acvbrasil.com.br',
-  from: 'felipe@acvbrasil.com.br', // must be verified in SendGrid
-  subject: 'New WhatsApp Lead',
-  text: `
-New lead received:
+await axios.post(process.env.TEAMS_WEBHOOK_URL, {
+  text: `📩 New WhatsApp Lead
 
 Phone: ${lead.phone}
 Need: ${lead.need}
-Email: ${lead.email}
-`
-})
-.then(() => console.log("✅ Email sent"))
-.catch(err => console.error("❌ Email error:", err));
+Email: ${lead.email}`
+});
   }
 });
 const PORT = process.env.PORT || 8080;
